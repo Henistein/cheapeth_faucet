@@ -8,7 +8,7 @@ data = json.load(open('config.json'))
 default_account = Web3.toChecksumAddress(data['deployer_addr'])
 
 # connect to the node
-w3 = Web3(Web3.HTTPProvider('https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'))
+w3 = Web3(Web3.HTTPProvider('https://node.cheapeth.org/rpc'))
 w3.eth.default_account = default_account
 
 # load abi file
@@ -28,7 +28,7 @@ def index():
 def faucet():
   address = Web3.toChecksumAddress(request.args.get('address'))
   nonce = w3.eth.getTransactionCount(default_account)
-  tx_hash = contract.functions.sendEther(address).buildTransaction({'gas': 300000,'gasPrice': w3.toWei('4', 'gwei'),'nonce': nonce,})
+  tx_hash = contract.functions.sendEther(address).buildTransaction({'chainId':777, 'gas': 300000,'gasPrice': w3.toWei('1', 'gwei'),'nonce': nonce,})
   signed_txn = w3.eth.account.sign_transaction(tx_hash, private_key=data['private_key'])
   w3.eth.sendRawTransaction(signed_txn.rawTransaction)
 
